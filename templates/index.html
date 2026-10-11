@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head> 
+    <meta charset="UTF-8">
+    <title>Control de equipo</title>
+</head>
+<body> 
+    <h1>Control de equipo</h1>
+
+    <form action="/agregar" method="post">
+        <input type="text" name="nombre" placeholder="Equipo" required>
+        <input type="text" name="responsable" placeholder="Responsable" required>
+        <button type="submit">Agregar</button>
+    </form>
+
+
+    <table border="1"> 
+        <tr>
+            <th>Equipo</th>
+            <th>Responsable</th>
+            <th>Fecha de entrega</th>
+            <th>Dias</th>
+            <th>Estado</th>
+            <th>Accion</th>
+        </tr>
+        {% for item in equipo %}
+        <tr> {$ if not item.devuelto and item.dias > 7 %}style="background-color: #ffcccc;"{% endif %}
+            <td>{{ item.nombre }}</td>
+            <td>{{ item.responsable }}</td>
+            <td>{{ item.fecha_entrega }}</td>
+            <td>{{ item.dias }}</td>
+            <td>
+                {% if item.devuelto %}
+                Devuelto
+                {% else %}
+                Entregado
+                {% endif %}
+            </td>
+            <td>
+                {% if not item.devuelto %}
+                <form action="/devolver/{{ item.id }}" method="post">
+                    <button type="submit">Marcar devuelto</button>
+                </form>
+                {% endif %}
+                <form action="/borrar/{{ item.id }}" method="post">
+                    <button type="submit">Borrar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
